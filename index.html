@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#b71c1c">
+    <title>شكراً لكم - اتحاد طلاب تحيا مصر</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة الزينة -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #b71c1c;
+            --primary-dark: #7f0000;
+            --accent-color: #ffc107;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+        }
+
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; padding: 20px; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .main-card { 
+            width: 100%; max-width: 480px; 
+            background: var(--card-bg); padding: 30px 25px; 
+            border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+            text-align: center; position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .main-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        /* إخفاء العناصر القديمة */
+        .countdown-box, #cinematicOverlay { display: none !important; }
+
+        h1 { color: var(--primary-color); margin: 0 0 5px 0; font-size: 26px; font-weight: 900; }
+        p.desc { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
+
+        /* تنسيق الحقل */
+        input[type="text"] { 
+            width: 100%; padding: 18px 50px 18px 20px;
+            font-family: 'Cairo'; font-size: 16px; font-weight: 700;
+            color: var(--text-color); border: 2px solid #eee; border-radius: 15px; background: #fafafa;
+            transition: 0.3s all;
+        }
+        
+        /* الأزرار */
+        .btn {
+            width: 100%; padding: 15px; border: none; border-radius: 12px; font-family: 'Cairo';
+            font-size: 16px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+            transition: 0.2s; position: relative; margin-bottom: 10px; text-decoration: none;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); color: white; box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); padding: 18px; font-size: 18px; }
+        
+        .btn-download { background-color: #10b981; color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); }
+        .btn-share { background-color: #3b82f6; color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25); }
+        .btn-calendar { background-color: #f8f9fa; color: #333; border: 2px solid #eee; }
+        .btn-secondary { background-color: white; color: #666; border: 2px solid #eee; margin-top: 15px; }
+
+        #resultSection { display: none; margin-top: 20px; border-top: 2px dashed #eee; padding-top: 20px; }
+        
+        /* شاشة النهاية (الشكر) */
+        #endedSection { 
+            display: block; /* ظاهر افتراضياً الآن */
+            padding: 40px 10px;
+            animation: fadeIn 0.8s ease;
+        }
+        .ended-icon { font-size: 60px; color: #ccc; margin-bottom: 25px; animation: float 3s ease-in-out infinite; }
+        .ended-title { color: var(--primary-color); font-size: 28px; margin-bottom: 15px; line-height: 1.4; }
+        .ended-desc { color: #555; margin-bottom: 30px; font-size: 16px; line-height: 1.8; }
+        
+        .follow-label {
+            font-size: 14px; color: #777; margin-bottom: 8px; font-weight: 600;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        .footer { margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+        .social-links { display: flex; justify-content: center; margin-bottom: 10px; }
+        .social-btn {
+            width: 45px; height: 45px; border-radius: 50%; background: #e7f5ff; 
+            display: flex; align-items: center; justify-content: center;
+            color: #1877f2; text-decoration: none; transition: 0.3s; font-size: 20px;
+        }
+        .social-btn:hover { background: #1877f2; color: white; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
+        .copyright { font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+
+    <div class="main-card" id="mainCard">
+        
+        <!-- الأقسام المخفية (للحفاظ على الهيكل فقط) -->
+        <div id="countdown" style="display:none;"></div>
+        <div id="inputSection" style="display:none;"></div>
+        <div id="resultSection" style="display:none;"></div>
+
+        <!-- قسم انتهاء الحفل (رسالة الشكر) -->
+        <div id="endedSection">
+            <div class="ended-icon">
+                <i class="fa-solid fa-heart" style="color: var(--primary-color);"></i>
+            </div>
+            <h1 class="ended-title">شكراً لكم يا أبطال! ❤️</h1>
+            <p class="ended-desc">
+                انتهت فعاليات حفل "أبطال الحكاية".<br>
+                سعدنا جداً بحضوركم ومشاركتكم في هذا اليوم المميز. نتمنى لكم دوام التوفيق والنجاح.
+            </p>
+            
+            <p class="follow-label">لمتابعة كل ما هو قادم وجميع أخبار الاتحاد:</p>
+            
+            <a href="https://www.facebook.com/Students.union.long.live.eg/?locale=ar_AR" target="_blank" class="btn btn-primary">
+                <span>تابع صفحتنا الرسمية على فيسبوك</span>
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+        </div>
+
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://www.facebook.com/Students.union.long.live.eg/?locale=ar_AR" target="_blank" class="social-btn fb" title="تابعنا على فيسبوك">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+            </div>
+            <div class="copyright">جميع الحقوق محفوظة © اتحاد طلاب تحيا مصر</div>
+        </div>
+    </div>
+
+    <script>
+        // تشغيل تأثير الاحتفال البسيط عند الفتح
+        window.onload = function() {
+            triggerConfetti();
+        };
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            confetti(Object.assign({}, defaults, { particleCount: 50, origin: { x: 0.5, y: 0.5 } }));
+        }
+    </script>
+</body>
+</html>
